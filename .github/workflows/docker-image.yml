@@ -19,6 +19,13 @@ jobs:
       matrix:
         image: [ubuntu-20.04]
         php: [ "8.1", "8.2", "8.3" ]
+        repo: 
+          - name: pmmp/PocketMine-MP
+            namespace: pmmp
+            version: 5.15.0
+          - name: Plutonium-Mcpe/PocketMine-MP
+            namespace: plutonium
+            version: 5.100.1
 
     steps:
       - name: Set up Docker Buildx
@@ -45,7 +52,8 @@ jobs:
         uses: docker/build-push-action@v5.1.0
         with:
           push: true
-          tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.SERVER_NAME }}/${{ env.IMAGE_NAME }}-php${{ matrix.php }}:latest
+          tags: ${{ steps.meta.outputs.tags }},${{ env.REGISTRY }}/${{ env.SERVER_NAME }}/${{ env.IMAGE_NAME }}-php${{ matrix.php }}-${{ matrix.repo.namespace }}:latest
           build-args: |
             PHP_VERSION=${{ matrix.php }}
-            PMMP_TAG=5.10.0
+            PMMP_REPO=${{ matrix.repo.name }}
+            PMMP_TAG=${{ matrix.repo.version }}
