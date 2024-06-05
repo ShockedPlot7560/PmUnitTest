@@ -42,7 +42,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9dc751fe249ad99385a2583ee0d084c400eee04e
         with:
-          images: ${{ env.REGISTRY }}/${{ env.SERVER_NAME }}/${{ env.IMAGE_NAME }}-php${{ matrix.php }}
+          images: ${{ env.REGISTRY }}/${{ env.SERVER_NAME }}/${{ env.IMAGE_NAME }}-php${{ matrix.php }}-${{ matrix.repo.namespace }}
 
       - name: Get name of Docker repository name
         id: docker-repo-name
