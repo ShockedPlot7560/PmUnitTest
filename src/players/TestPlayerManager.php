@@ -6,13 +6,11 @@ use InvalidArgumentException;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\network\mcpe\compression\ZlibCompressor;
-use pocketmine\network\mcpe\convert\TypeConverter;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\PacketPool;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
 use pocketmine\network\mcpe\protocol\ResourcePackClientResponsePacket;
 use pocketmine\network\mcpe\protocol\serializer\PacketSerializer;
-use pocketmine\network\mcpe\protocol\serializer\PacketSerializerContext;
 use pocketmine\network\mcpe\protocol\types\DeviceOS;
 use pocketmine\network\mcpe\protocol\types\InputMode;
 use pocketmine\network\mcpe\protocol\types\login\ClientData;
@@ -153,16 +151,12 @@ class TestPlayerManager implements Listener {
 		if ($rakLibInterface === null) {
 			throw new RuntimeException("RakLibInterface not found");
 		}
-		/** @var ReflectionClass<RakLibInterface> $reflection */
-		$reflection = new ReflectionClass($rakLibInterface);
-		$packetContect = $reflection->getProperty("packetSerializerContext");
-		$value = $packetContect->getValue($rakLibInterface);
 		$session = new TestPlayerNetworkSession(
 			$server,
 			$network->getSessionManager(),
 			PacketPool::getInstance(),
 			new TestPacketSender(),
-			new StandardPacketBroadcaster($server, $value),
+			new StandardPacketBroadcaster($server),
 			ZlibCompressor::getInstance(),
 			$server->getIp(),
 			$server->getPort(),
@@ -177,7 +171,7 @@ class TestPlayerManager implements Listener {
 		$rp->invoke($session);
 
 		$packet = ResourcePackClientResponsePacket::create(ResourcePackClientResponsePacket::STATUS_COMPLETED, []);
-		$serializer = PacketSerializer::encoder(new PacketSerializerContext(TypeConverter::getInstance()->getItemTypeDictionary()));
+		$serializer = PacketSerializer::encoder();
 		$packet->encode($serializer);
 		$session->handleDataPacket($packet, $serializer->getBuffer());
 

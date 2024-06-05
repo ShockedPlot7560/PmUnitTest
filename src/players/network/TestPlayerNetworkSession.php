@@ -17,7 +17,6 @@ use pocketmine\network\NetworkSessionManager;
 use pocketmine\player\Player;
 use pocketmine\promise\PromiseResolver;
 use pocketmine\Server;
-use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use ShockedPlot7560\PmmpUnit\players\network\listener\TestPlayerPacketListener;
@@ -53,11 +52,7 @@ class TestPlayerNetworkSession extends NetworkSession {
 				break;
 			}
 		}
-		/** @var ReflectionClass<RakLibInterface> $reflection */
-		$reflection = new ReflectionClass($rakLibInterface);
-		$packetContect = $reflection->getProperty("packetSerializerContext");
-		$value = $packetContect->getValue($rakLibInterface);
-		parent::__construct($server, $manager, $packetPool, $value, $sender, $broadcaster, new StandardEntityEventBroadcaster($broadcaster, $typeConverter), $compressor, $typeConverter, $ip, $port);
+		parent::__construct($server, $manager, $packetPool, $sender, $broadcaster, new StandardEntityEventBroadcaster($broadcaster, $typeConverter), $compressor, $typeConverter, $ip, $port);
 		$this->playerAddResolver = $playerAddResolver;
 
 		// do not store the resolver eternally

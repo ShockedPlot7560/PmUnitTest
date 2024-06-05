@@ -40,7 +40,7 @@ class BaseAssert {
 	/**
 	 * @phpstan-return PromiseInterface<null>
 	 */
-	protected function assertNotEquals(mixed $expected, mixed $actual, string $message = null) : PromiseInterface {
+	protected function assertNotEquals(mixed $expected, mixed $actual, ?string $message = null) : PromiseInterface {
 		Assert::notEq($actual, $expected, $message ?? "Expected $actual to not be equal to $expected");
 
 		return $this->assertSyncPromise();

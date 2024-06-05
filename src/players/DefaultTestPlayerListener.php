@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ShockedPlot7560\PmmpUnit\players;
 
-use pocketmine\network\mcpe\convert\TypeConverter;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\ChangeDimensionPacket;
 use pocketmine\network\mcpe\protocol\ClientboundPacket;
@@ -12,7 +11,6 @@ use pocketmine\network\mcpe\protocol\PlayerActionPacket;
 use pocketmine\network\mcpe\protocol\PlayStatusPacket;
 use pocketmine\network\mcpe\protocol\RespawnPacket;
 use pocketmine\network\mcpe\protocol\serializer\PacketSerializer;
-use pocketmine\network\mcpe\protocol\serializer\PacketSerializerContext;
 use pocketmine\network\mcpe\protocol\SetLocalPlayerAsInitializedPacket;
 use pocketmine\network\mcpe\protocol\types\BlockPosition;
 use pocketmine\network\mcpe\protocol\types\PlayerAction;
@@ -39,7 +37,7 @@ final class DefaultTestPlayerListener implements TestPlayerListener {
 				$this->plugin->getPlugin()->getScheduler()->scheduleDelayedTask(new ClosureTask(static function () use ($session, $entity_runtime_id) : void {
 					if ($session->isConnected()) {
 						$packet = SetLocalPlayerAsInitializedPacket::create($entity_runtime_id);
-						$serializer = PacketSerializer::encoder(new PacketSerializerContext(TypeConverter::getInstance()->getItemTypeDictionary()));
+						$serializer = PacketSerializer::encoder();
 						$packet->encode($serializer);
 						$session->handleDataPacket($packet, $serializer->getBuffer());
 					}
@@ -75,7 +73,7 @@ final class DefaultTestPlayerListener implements TestPlayerListener {
 							0
 						);
 
-						$serializer = PacketSerializer::encoder(new PacketSerializerContext(TypeConverter::getInstance()->getItemTypeDictionary()));
+						$serializer = PacketSerializer::encoder();
 						$packet->encode($serializer);
 						$session->handleDataPacket($packet, $serializer->getBuffer());
 					}
