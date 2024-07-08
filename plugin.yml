@@ -1,6 +1,6 @@
 ---
 name: PmmpUnit
-version: 1.1.5
+version: 1.2.6
 main: ShockedPlot7560\PmmpUnit\PmmpUnit
 api: 5.0.0
 src-namespace-prefix: ShockedPlot7560\PmmpUnit
