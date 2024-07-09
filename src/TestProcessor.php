@@ -73,7 +73,11 @@ class TestProcessor {
 		if (TestMemory::$currentTest !== null) {
 			global $lastExceptionError, $lastError;
 			$error = $lastExceptionError ?? $lastError;
-			TestResults::fatalTest(TestMemory::$currentTest, ServerCrashedException::fromArray($error));
+			if($error === null){
+				TestResults::fatalTest(TestMemory::$currentTest, new ServerCrashedException());
+			}else{
+				TestResults::fatalTest(TestMemory::$currentTest, ServerCrashedException::fromArray($error));
+			}
 			$this->finish(false);
 		}
 	}
