@@ -25,7 +25,7 @@ jobs:
             version: 5.16.0
           - name: Plutonium-Mcpe/PocketMine-MP
             namespace: plutonium
-            version: 5.101.0
+            version: 5.101.1
 
     steps:
       - name: Set up Docker Buildx
