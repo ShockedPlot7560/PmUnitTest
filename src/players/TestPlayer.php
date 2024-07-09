@@ -9,12 +9,15 @@ use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\ClientboundPacket;
 use pocketmine\network\mcpe\protocol\ServerboundPacket;
 use pocketmine\player\Player;
+use pocketmine\scheduler\ClosureTask;
 use React\Promise\Deferred;
 use React\Promise\PromiseInterface;
 use ShockedPlot7560\PmmpUnit\players\behaviour\TestPlayerBehaviour;
 use ShockedPlot7560\PmmpUnit\players\network\listener\ClosureTestPlayerPacketListener;
 use ShockedPlot7560\PmmpUnit\players\network\TestPlayerNetworkSession;
 use ShockedPlot7560\PmmpUnit\players\util\SortedMap;
+use ShockedPlot7560\PmmpUnit\PmmpUnit;
+use ShockedPlot7560\PmmpUnit\utils\TimeoutException;
 
 final class TestPlayer {
 	private TestPlayerNetworkSession $session;
@@ -94,11 +97,16 @@ final class TestPlayer {
 	/**
 	 * @return PromiseInterface<ClientboundPacket>
 	 */
-	public function registerSpecificSendPacketListener(string $packetName) : PromiseInterface {
+	public function registerSpecificSendPacketListener(string $packetName, int $timeout = 60) : PromiseInterface {
 		$promise = new Deferred();
+		$handler = PmmpUnit::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(function () use ($promise) {
+			$promise->reject(new TimeoutException('Timeout for packet expired'));
+		}), $timeout * 20);
+
 		$this->getNetworkSession()->registerSpecificPacketListener($packetName, new ClosureTestPlayerPacketListener(
-			function (ClientboundPacket $packet, NetworkSession $session) use ($promise) : void {
+			function (ClientboundPacket $packet, NetworkSession $session) use ($promise, $handler) : void {
 				$promise->resolve($packet);
+				$handler->cancel();
 			}
 		));
 

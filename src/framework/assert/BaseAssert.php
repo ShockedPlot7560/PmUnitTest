@@ -14,7 +14,7 @@ class BaseAssert {
 	 * @phpstan-return PromiseInterface<null>
 	 */
 	protected function assertSame(mixed $expected, mixed $actual, string $message = '') : PromiseInterface {
-		Assert::same($expected, $actual, $message);
+		Assert::same($actual, $expected, $message);
 
 		return $this->assertSyncPromise();
 	}
@@ -23,7 +23,7 @@ class BaseAssert {
 	 * @phpstan-return PromiseInterface<null>
 	 */
 	protected function assertNotSame(mixed $expected, mixed $actual, ?string $message = null) : PromiseInterface {
-		Assert::notSame($expected, $actual, $message ?? "Expected $expected to not be the same as $actual");
+		Assert::notSame($actual, $expected, $message ?? "Expected $expected to not be the same as $actual");
 
 		return $this->assertSyncPromise();
 	}

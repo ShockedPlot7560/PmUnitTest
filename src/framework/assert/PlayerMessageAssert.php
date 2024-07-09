@@ -10,8 +10,8 @@ trait PlayerMessageAssert {
 	/**
 	 * @phpstan-return PromiseInterface<null>
 	 */
-	protected function promisePlayerReceiveMessageEquals(string $message, TestPlayer $player, bool $cleanPacket = false) : PromiseInterface {
-		return $this->promisePlayerReceiveMessage($player, $cleanPacket)
+	protected function promisePlayerReceiveMessageEquals(string $message, TestPlayer $player, bool $cleanPacket = false, int $timeout = 60) : PromiseInterface {
+		return $this->promisePlayerReceiveMessage($player, $cleanPacket, $timeout)
 			->then(function (string $m) use ($message) {
 				return $this->assertEquals($message, $m);
 			});
@@ -20,8 +20,8 @@ trait PlayerMessageAssert {
 	/**
 	 * @phpstan-return PromiseInterface<null>
 	 */
-	protected function promisePlayerReceiveMessageNotEquals(string $message, TestPlayer $player, bool $cleanPacket = false) : PromiseInterface {
-		return $this->promisePlayerReceiveMessage($player, $cleanPacket)
+	protected function promisePlayerReceiveMessageNotEquals(string $message, TestPlayer $player, bool $cleanPacket = false, int $timeout = 60) : PromiseInterface {
+		return $this->promisePlayerReceiveMessage($player, $cleanPacket, $timeout)
 			->then(function (string $m) use ($message) {
 				return $this->assertNotEquals($message, $m);
 			});
@@ -30,8 +30,8 @@ trait PlayerMessageAssert {
 	/**
 	 * @phpstan-return PromiseInterface<null>
 	 */
-	protected function promisePlayerReceiveMessageContains(string $needle, TestPlayer $player, bool $cleanPacket = false) : PromiseInterface {
-		return $this->promisePlayerReceiveMessage($player, $cleanPacket)
+	protected function promisePlayerReceiveMessageContains(string $needle, TestPlayer $player, bool $cleanPacket = false, int $timeout = 60) : PromiseInterface {
+		return $this->promisePlayerReceiveMessage($player, $cleanPacket, $timeout)
 			->then(function (string $m) use ($needle) {
 				return $this->assertStringContainsString($needle, $m);
 			});
@@ -40,8 +40,8 @@ trait PlayerMessageAssert {
 	/**
 	 * @phpstan-return PromiseInterface<null>
 	 */
-	protected function promisePlayerReceiveMessageNotContains(string $needle, TestPlayer $player, bool $cleanPacket = false) : PromiseInterface {
-		return $this->promisePlayerReceiveMessage($player, $cleanPacket)
+	protected function promisePlayerReceiveMessageNotContains(string $needle, TestPlayer $player, bool $cleanPacket = false, int $timeout = 60) : PromiseInterface {
+		return $this->promisePlayerReceiveMessage($player, $cleanPacket, $timeout)
 			->then(function (string $m) use ($needle) {
 				return $this->assertStringNotContainsString($needle, $m);
 			});
@@ -50,7 +50,7 @@ trait PlayerMessageAssert {
 	/**
 	 * @phpstan-return PromiseInterface<string>
 	 */
-	private function promisePlayerReceiveMessage(TestPlayer $player, bool $cleanPacket = false) : PromiseInterface {
+	private function promisePlayerReceiveMessage(TestPlayer $player, bool $cleanPacket = false, int $timeout = 60) : PromiseInterface {
 		// if ($message instanceof Translatable) {
 		// 	return $this->promisePlayerReceiveTextPacket($player, TextPacket::TYPE_TRANSLATION, $cleanPacket)
 		// 		->then(function (TextPacket $packet) use ($player) : string {
@@ -59,7 +59,7 @@ trait PlayerMessageAssert {
 		// 			return $packet->parameters[1];
 		// 		});
 		// } else {
-		return $this->promisePlayerReceiveTextPacket($player, TextPacket::TYPE_RAW)
+		return $this->promisePlayerReceiveTextPacket($player, TextPacket::TYPE_RAW, $timeout)
 			->then(function (TextPacket $packet) : string {
 				return $packet->message;
 			});

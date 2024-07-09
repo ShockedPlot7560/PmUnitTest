@@ -16,8 +16,8 @@ trait PlayerTextPacketAssert {
 	 * @phpstan-param TextPacket::TYPE_* $type
 	 * @phpstan-return PromiseInterface<TextPacket>
 	 */
-	private function promisePlayerReceiveTextPacket(TestPlayer $player, int $type) : PromiseInterface {
-		return $player->registerSpecificSendPacketListener(TextPacket::class)
+	private function promisePlayerReceiveTextPacket(TestPlayer $player, int $type, int $timeout = 60) : PromiseInterface {
+		return $player->registerSpecificSendPacketListener(TextPacket::class, $timeout)
 			->then(function (TextPacket $packet) use ($type) {
 				Assert::eq($packet->type, $type, sprintf(
 					"Expected %s type, got %s type",
