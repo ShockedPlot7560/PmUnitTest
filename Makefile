@@ -40,7 +40,7 @@ composer/install: dev/composer.phar
 	$(PHP) $(COMPOSER) install
 
 unittests:
-	export PHP_VERSION=8.2 && export PMMP_TAG=5.16.0 && make suitetest
+	export PHP_VERSION=8.2 && export PMMP_TAG=5.17.0 && make suitetest
 
 suitetest:
 	$(eval CONTAINER_PREFIX := unittests-suite)
