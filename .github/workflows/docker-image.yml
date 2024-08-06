@@ -22,10 +22,10 @@ jobs:
         repo: 
           - name: pmmp/PocketMine-MP
             namespace: pmmp
-            version: 5.16.0
+            version: 5.17.0
           - name: Plutonium-Mcpe/PocketMine-MP
             namespace: plutonium
-            version: 5.101.1
+            version: 5.102.1
 
     steps:
       - name: Set up Docker Buildx
